@@ -2,3 +2,4 @@ node_modules
 .DS_*
 .vscode
 yarn-error.log
+dist/*
