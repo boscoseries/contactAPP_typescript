@@ -28,7 +28,8 @@ export const validateInput = (input: any) => {
       .optional(),
     address: joi.string().optional(),
     website: joi.string().optional(),
-    status: joi.string().optional()
+    status: joi.string().required(),
+    deleted: joi.bool().required()
   };
 
   const { error, value } = joi.validate(input, createSchema, {

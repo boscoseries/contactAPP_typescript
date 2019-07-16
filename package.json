@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc -w",
     "dev:start": "nodemon ./bin/www",
+    "prestart": "tsc",
     "start": "node ./bin/www",
     "test": "jest contact"
   },
