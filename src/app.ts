@@ -1,23 +1,28 @@
 import express from "express";
 import createError from "http-errors";
 import path from "path";
-import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
 import logger from "morgan";
+
+import dotenv from 'dotenv';
+dotenv.config();
 
 import indexRouter from "./routes/index";
 import contactRouter from "./routes/contact";
 
 const app = express();
 
-// view engine setup
-app.set("views", path.join(__dirname, "../views"));
-app.set("view engine", "jade");
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
+
+// connect to mongoDB server
+mongoose.connect(process.env.MONGODB_URI!, { useNewUrlParser: true })
+const db = mongoose.connection
+db.on('error', (err) => console.log(err))
+db.once('open', () => console.log('connected to mongodb'))
+
 
 app.use("/", indexRouter);
 app.use("/api/contacts", contactRouter);
