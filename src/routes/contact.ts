@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { create, getAll, getOne, update, deleteOne, getBlockedOrDeleted } from "../controllers/contact";
+import { addContact, getAll, getOne, update, getBlocked, deleteOne } from "../controllers/contacts";
 
 const router = Router();
 
 /* CREATE contact. */
-router.post("/", create);
+router.post("/", addContact);
 /* GET all contacts. */
 router.get("/", getAll);
 /* GET blocked contacts. */
-router.get("/blockedordeleted", getBlockedOrDeleted);
+router.get("/blockedordeleted", getBlocked);
 /* GET a single contact. */
 router.get("/:id", getOne);
 /* UPDATE status of a single contact. */

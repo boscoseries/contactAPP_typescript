@@ -11,15 +11,15 @@ export const validateInput = (input: any) => {
       .min(2)
       .required(),
     phone: joi
-      .string()
+      .number()
       .min(11)
       .required(),
     mobile: joi
-      .string()
+      .number()
       .min(11)
       .optional(),
     home: joi
-      .string()
+      .number()
       .min(11)
       .optional(),
     email: joi
@@ -28,8 +28,6 @@ export const validateInput = (input: any) => {
       .optional(),
     address: joi.string().optional(),
     website: joi.string().optional(),
-    status: joi.string().required(),
-    deleted: joi.bool().required()
   };
 
   const { error, value } = joi.validate(input, createSchema, {

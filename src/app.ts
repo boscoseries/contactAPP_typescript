@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../public")));
 
 // connect to mongoDB server
-mongoose.connect(process.env.MONGODB_URI!, { useNewUrlParser: true })
+mongoose.connect(process.env.MONGODB_LOCALHOST!, { useNewUrlParser: true });
 const db = mongoose.connection
 db.on('error', (err) => console.log(err))
 db.once('open', () => console.log('connected to mongodb'))

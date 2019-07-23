@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { contacts } from "../models/contacts";
+import { contacts } from "../models/default";
 import { validateInput } from "../middleware/validate";
 
 export const create = (req: Request, res: Response) => {
