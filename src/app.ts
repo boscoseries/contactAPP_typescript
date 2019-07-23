@@ -1,11 +1,8 @@
 import express from "express";
 import createError from "http-errors";
 import path from "path";
-import mongoose from "mongoose";
 import logger from "morgan";
-
-import dotenv from "dotenv";
-dotenv.config();
+import "./models/connection";
 
 import indexRouter from "./routes/index";
 import contactRouter from "./routes/contact";
@@ -16,14 +13,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../public")));
-
-// connect to mongoDB server
-mongoose.connect(process.env.MONGODB_DEVELOPMENT!, { useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", err => console.log(err));
-db.once("open", () =>
-  console.log(`connected to mongodb ${process.env.MONGODB_DEVELOPMENT}`)
-);
 
 app.use("/", indexRouter);
 app.use("/api/contacts", contactRouter);
