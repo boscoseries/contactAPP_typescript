@@ -4,7 +4,12 @@ import { validateInput } from "../middleware/validate";
 
 export const create = (req: Request, res: Response) => {
   const { error, value } = validateInput(req.body);
-  const contact = { ...value, status: "available", deleted: false, id: contacts.length + 1 };
+  const contact = {
+    ...value,
+    status: "available",
+    deleted: false,
+    id: contacts.length + 1
+  };
 
   if (error) {
     res.status(400).json(error.message);
@@ -25,7 +30,9 @@ export const getAll = (_req: Request, res: Response) => {
     });
     return;
   }
-  const validContacts = contacts.filter(contact => contact.status !== "blocked" && contact.deleted === false);
+  const validContacts = contacts.filter(
+    contact => contact.status !== "blocked" && contact.deleted === false
+  );
   res.status(200).json({
     status: 200,
     data: validContacts
@@ -33,7 +40,9 @@ export const getAll = (_req: Request, res: Response) => {
 };
 
 export const getBlockedOrDeleted = (_req: Request, res: Response) => {
-  const blockedOrDeleted = contacts.filter(contact => contact.status === "blocked" || contact.deleted === true);
+  const blockedOrDeleted = contacts.filter(
+    contact => contact.status === "blocked" || contact.deleted === true
+  );
   if (!blockedOrDeleted.length) {
     res.status(204).json({
       status: 204,
@@ -49,7 +58,11 @@ export const getBlockedOrDeleted = (_req: Request, res: Response) => {
 
 export const getOne = (req: Request, res: Response) => {
   const contact: any = contacts.find(
-    contact => contact.id === parseFloat(req.params.id) && contact.status === "available" && contact.deleted === false);
+    contact =>
+      contact.id === parseFloat(req.params.id) &&
+      contact.status === "available" &&
+      contact.deleted === false
+  );
   if (!contact) {
     res.status(404).json({
       status: 404,
@@ -64,7 +77,10 @@ export const getOne = (req: Request, res: Response) => {
 };
 
 export const update = (req: Request, res: Response) => {
-  const contact: any = contacts.find(contact => contact.id === parseFloat(req.params.id) && contact.deleted === false);
+  const contact: any = contacts.find(
+    contact =>
+      contact.id === parseFloat(req.params.id) && contact.deleted === false
+  );
   if (!contact) {
     res.status(404).json({
       status: 404,
@@ -94,7 +110,7 @@ export const update = (req: Request, res: Response) => {
       status: 200,
       data: contact
     });
-  };
+  }
 
   if (req.route.path === "/:id/delete") {
     contact.deleted = req.body.deleted || true;
@@ -106,7 +122,10 @@ export const update = (req: Request, res: Response) => {
 };
 
 export const deleteOne = (req: Request, res: Response) => {
-  const contact: any = contacts.find(contact => contact.id === parseFloat(req.params.id) && contact.deleted === false);
+  const contact: any = contacts.find(
+    contact =>
+      contact.id === parseFloat(req.params.id) && contact.deleted === false
+  );
   if (!contact) {
     res.status(404).json({
       status: 404,

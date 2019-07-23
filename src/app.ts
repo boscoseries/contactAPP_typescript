@@ -4,7 +4,7 @@ import path from "path";
 import mongoose from "mongoose";
 import logger from "morgan";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 import indexRouter from "./routes/index";
@@ -19,10 +19,9 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 // connect to mongoDB server
 mongoose.connect(process.env.MONGODB_LOCALHOST!, { useNewUrlParser: true });
-const db = mongoose.connection
-db.on('error', (err) => console.log(err))
-db.once('open', () => console.log('connected to mongodb'))
-
+const db = mongoose.connection;
+db.on("error", err => console.log(err));
+db.once("open", () => console.log("connected to mongodb"));
 
 app.use("/", indexRouter);
 app.use("/api/contacts", contactRouter);

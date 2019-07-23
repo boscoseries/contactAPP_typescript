@@ -27,7 +27,7 @@ export const validateInput = (input: any) => {
       .email()
       .optional(),
     address: joi.string().optional(),
-    website: joi.string().optional(),
+    website: joi.string().optional()
   };
 
   const { error, value } = joi.validate(input, createSchema, {

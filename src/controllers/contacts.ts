@@ -12,7 +12,7 @@ export const addContact = async (req: Request, res: Response) => {
     return;
   }
   try {
-    const values = { ...value, status: "available", deleted: false }
+    const values = { ...value, status: "available", deleted: false };
     const contact = new Contact(values);
     const data = await contact.save();
     res.status(201).json({
@@ -31,7 +31,10 @@ export const addContact = async (req: Request, res: Response) => {
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const data = await Contact.find();
-    const contacts = data.filter((contact: { status: string; deleted: boolean }) => contact.status === "available" && !contact.deleted);
+    const contacts = data.filter(
+      (contact: { status: string; deleted: boolean }) =>
+        contact.status === "available" && !contact.deleted
+    );
     if (contacts.length) {
       res.status(200).json({
         statusCode: 200,
@@ -56,7 +59,10 @@ export const getAll = async (_req: Request, res: Response) => {
 export const getBlocked = async (_req: Request, res: Response) => {
   try {
     const data = await Contact.find();
-    const contacts = data.filter((contact: { status: string; deleted: boolean }) => contact.status === "blocked" || contact.deleted);
+    const contacts = data.filter(
+      (contact: { status: string; deleted: boolean }) =>
+        contact.status === "blocked" || contact.deleted
+    );
     if (contacts.length) {
       res.status(200).json({
         statusCode: 200,
@@ -117,7 +123,9 @@ export const update = async (req: Request, res: Response) => {
 
     // update contact details
     if (req.route.path === "/:id/details") {
-      const data = await Contact.findByIdAndUpdate(req.params.id, input, { new: true });
+      const data = await Contact.findByIdAndUpdate(req.params.id, input, {
+        new: true
+      });
       res.status(200).json({
         statusCode: 200,
         data
@@ -126,7 +134,11 @@ export const update = async (req: Request, res: Response) => {
     }
     // update contact status
     if (req.route.path === "/:id/status") {
-      const data = await Contact.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+      const data = await Contact.findByIdAndUpdate(
+        req.params.id,
+        { status: req.body.status },
+        { new: true }
+      );
       res.status(200).json({
         statusCode: 200,
         data
@@ -135,7 +147,11 @@ export const update = async (req: Request, res: Response) => {
 
     // update deleted status
     if (req.route.path === "/:id/delete") {
-      const data = await Contact.findByIdAndUpdate(req.params.id, { deleted: req.body.deleted }, { new: true });
+      const data = await Contact.findByIdAndUpdate(
+        req.params.id,
+        { deleted: req.body.deleted },
+        { new: true }
+      );
       res.status(200).json({
         statusCode: 200,
         data

@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 var contactSchema = new mongoose.Schema({
   firstname: String,
@@ -12,4 +12,4 @@ var contactSchema = new mongoose.Schema({
   deleted: Boolean
 });
 
-module.exports = mongoose.model('Contact', contactSchema)
+module.exports = mongoose.model("Contact", contactSchema);
