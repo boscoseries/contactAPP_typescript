@@ -19,9 +19,8 @@ const dropDB = async () => {
 };
 
 describe("API Routes", () => {
-
-  beforeAll( async () => await createDB());
-  afterAll( async () => await dropDB());
+  beforeAll(async () => await createDB());
+  afterAll(async () => await dropDB());
 
   const data1 = {
     surname: "John",
@@ -33,21 +32,23 @@ describe("API Routes", () => {
     website: "www.johndoe.com"
   };
 
- const data2 = {
-      surname: "Seun",
-      firstname: "Martins",
-      email: "smartins@gmail.com",
-      mobile: 2347056574873,
-      phone: 2349045859002,
-      address: "7 chevron drive, Lekki",
-      website: "www.seunmartins.com"
- };
+  const data2 = {
+    surname: "Seun",
+    firstname: "Martins",
+    email: "smartins@gmail.com",
+    mobile: 2347056574873,
+    phone: 2349045859002,
+    address: "7 chevron drive, Lekki",
+    website: "www.seunmartins.com"
+  };
 
   const contact2 = async () => {
-     return await request(app).post("/api/contacts").send(data2);
- }
+    return await request(app)
+      .post("/api/contacts")
+      .send(data2);
+  };
 
-  test("POST /api/contacts should create a new contact", async (done) => {
+  test("POST /api/contacts should create a new contact", async done => {
     return await request(app)
       .post("/api/contacts")
       .send(data1)
@@ -64,20 +65,20 @@ describe("API Routes", () => {
       });
   });
 
-  test("GET /api/contacts should return an array of 'not-blocked or deleted' contact", async (done) => {
+  test("GET /api/contacts should return an array of 'not-blocked or deleted' contact", async done => {
     return await request(app)
       .get("/api/contacts")
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty("contacts");
-        done()
+        done();
       });
   });
 
-  test("GET /api/contacts/id should return a contact with the given ID", async (done) => {
+  test("GET /api/contacts/id should return a contact with the given ID", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
-      await request(app)
+    await request(app)
       .get(`/api/contacts/${id}`)
       .expect(res => {
         expect(res.status).toBe(200);
@@ -87,7 +88,7 @@ describe("API Routes", () => {
     done();
   });
 
-  test("PATCH /api/contacts/id/details should return an updated contact", async (done) => {
+  test("PATCH /api/contacts/id/details should return an updated contact", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
@@ -95,7 +96,7 @@ describe("API Routes", () => {
       firstname: "Johnson",
       mobile: 2348012223333
     };
-      await request(app)
+    await request(app)
       .patch(`/api/contacts/${id}/details`)
       .send(details)
       .expect(res => {
@@ -103,20 +104,9 @@ describe("API Routes", () => {
         expect(res.body).toHaveProperty("data");
         expect(res.body.data).toHaveProperty("mobile", details.mobile);
       });
-    done()
+    done();
   });
-
-
-
-
-
-
-
-
 });
-
-
-
 
 // test("PATCH /api/contacts/id/status should return contact with an updated status", async () => {
 //   const id = 1;
