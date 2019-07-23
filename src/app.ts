@@ -18,10 +18,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../public")));
 
 // connect to mongoDB server
-mongoose.connect(process.env.MONGODB_LOCALHOST!, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_DEVELOPMENT!, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", err => console.log(err));
-db.once("open", () => console.log("connected to mongodb"));
+db.once("open", () =>
+  console.log(`connected to mongodb ${process.env.MONGODB_DEVELOPMENT}`)
+);
 
 app.use("/", indexRouter);
 app.use("/api/contacts", contactRouter);
