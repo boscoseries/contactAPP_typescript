@@ -17,11 +17,11 @@ export const addContact = async (req: Request, res: Response) => {
     const data = await contact.save();
     res.status(201).json({
       statusCode: 201,
-      data
+      data: data
     });
   } catch (error) {
     res.json({
-      statusCode: 400,
+      statusCode: 500,
       error: error.message
     });
   }
