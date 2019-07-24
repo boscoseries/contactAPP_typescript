@@ -27,7 +27,7 @@ const connection = mongoose
 
 export const dropDB = async () => {
   await mongoose.connection.db.dropDatabase();
-  mongoose.connection.close();
+  await mongoose.connection.close();
 };
 
 export default connection;
