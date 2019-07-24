@@ -6,7 +6,7 @@
     "dev:start": "nodemon ./bin/www",
     "prestart": "tsc",
     "start": "cross-env NODE_ENV=development node ./bin/www",
-    "test": "cross-env NODE_ENV=test jest contact"
+    "test": "cross-env NODE_ENV=test jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -30,6 +30,7 @@
     "@types/morgan": "^1.7.35",
     "@types/node": "^12.6.2",
     "@types/supertest": "^2.0.8",
+    "coveralls": "^3.0.5",
     "cross-env": "^5.2.0",
     "husky": "^3.0.0",
     "jest": "^24.8.0",
