@@ -17,11 +17,11 @@ export const addContact = async (req: Request, res: Response) => {
     const data = await contact.save();
     res.status(201).json({
       statusCode: 201,
-      data
+      data: data
     });
   } catch (error) {
     res.json({
-      statusCode: 400,
+      statusCode: 500,
       error: error.message
     });
   }
@@ -179,7 +179,7 @@ export const deleteOne = async (req: Request, res: Response) => {
     const deleted = await Contact.findByIdAndDelete({ _id: req.params.id });
     res.status(200).json({
       statusCode: 200,
-      data: `contact with id ${deleted._id} was successfully deleted`
+      message: `contact with id ${deleted._id} was successfully deleted`
     });
   } catch (error) {
     res.status(400).json({

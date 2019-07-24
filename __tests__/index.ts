@@ -1,10 +1,18 @@
 import request from "supertest";
 import app from "../src/app";
+import mongoose from "mongoose";
+
 
 describe("API Routes", () => {
-  test("GET / returns welcome onboard", () => {
-    return request(app)
+  
+  afterAll(async () => mongoose.connection.close());
+  test("GET / returns welcome onboard", async () => {
+    return await request(app)
       .get("/")
-      .expect(200, { message: "welcome onboard" });
+      .expect(res => {
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty("message");
+        expect(res.body.message).toContain("welcome");
+      });
   });
 });

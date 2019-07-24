@@ -1,28 +1,11 @@
 import request from "supertest";
 import app from "../src/app";
-const mongoose = require("mongoose");
-import dotenv from "dotenv";
-dotenv.config();
-
-const createDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_TEST, { useNewUrlParser: true });
-    console.log(`connected to ${process.env.MONGODB_TEST}`);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const dropDB = () => {
-  mongoose.connection.db.dropDatabase();
-  mongoose.connection.close();
-};
+import { dropDB } from "../src/models/connection";
 
 describe("API Routes", () => {
-  beforeAll(async () => await createDB());
-  afterAll(() => dropDB());
+  afterAll(async () => await dropDB());
 
-  const contact1 = {
+  const contact1Data = {
     surname: "John",
     firstname: "Doe",
     email: "jdoe@gmail.com",
@@ -32,7 +15,7 @@ describe("API Routes", () => {
     website: "www.johndoe.com"
   };
 
-  const contact2 = {
+  const contact2Data = {
     surname: "Seun",
     firstname: "Martins",
     email: "smartins@gmail.com",
@@ -42,21 +25,21 @@ describe("API Routes", () => {
     website: "www.seunmartins.com"
   };
 
-  test("create contact with id 2", () => {
-    return request(app)
+  const contact2 = async () => {
+    return await request(app)
       .post("/api/contacts")
-      .send(contact2);
-  });
+      .send(contact2Data);
+  };
 
   test("POST /api/contacts should create a new contact", async () => {
     return await request(app)
       .post("/api/contacts")
-      .send(contact1)
+      .send(contact1Data)
       .expect(res => {
         expect(res.status).toBe(201);
         expect(res.body.data).toEqual(
           expect.objectContaining({
-            ...contact1,
+            ...contact1Data,
             deleted: false,
             status: "available"
           })
@@ -72,70 +55,78 @@ describe("API Routes", () => {
         expect(res.body).toHaveProperty("contacts");
       });
   });
+
+  test("GET /api/contacts/id should return a contact with the given ID", async () => {
+    const contact = await contact2();
+    const id = contact.body.data._id;
+    await request(app)
+      .get(`/api/contacts/${id}`)
+      .expect(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.data).toHaveProperty("_id", id);
+        expect(res.body.data).toHaveProperty("email", "smartins@gmail.com");
+      });
+  });
+
+  test("PATCH /api/contacts/id/details should return an updated contact", async () => {
+    const contact = await contact2();
+    const id = contact.body.data._id;
+    const details = {
+      surname: "Okorowa",
+      firstname: "Johnson",
+      mobile: 2348012223333
+    };
+    await request(app)
+      .patch(`/api/contacts/${id}/details`)
+      .send(details)
+      .expect(res => {
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty("data");
+        expect(res.body.data).toHaveProperty("mobile", details.mobile);
+      });
+  });
+
+  test("PATCH /api/contacts/id/status should return contact with an updated status", async () => {
+    const contact = await contact2();
+    const id = contact.body.data._id;
+    const details = {
+      status: "blocked"
+    };
+    await request(app)
+      .patch(`/api/contacts/${id}/status`)
+      .send(details)
+      .expect(res => {
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty("data");
+        expect(res.body.data).toHaveProperty("status", details.status);
+      });
+  });
+
+  test("PATCH /api/contacts/id/delete should update contact's deleted status to true", async () => {
+    const contact = await contact2();
+    const id = contact.body.data._id;
+    const details = {
+      deleted: true
+    };
+    await request(app)
+      .patch(`/api/contacts/${id}/delete`)
+      .send(details)
+      .expect(res => {
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty("data");
+        expect(res.body.data).toHaveProperty("deleted", details.deleted);
+      });
+  });
+
+  test("DELETE /api/contacts/id should DELETE contact completely from database", async () => {
+    const contact = await contact2();
+    const id = contact.body.data._id;
+    await request(app)
+      .delete(`/api/contacts/${id}`)
+      .expect(res => {
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty("message");
+        expect(res.body.message).toContain(id);
+      });
+  });
 });
-
-// test("GET /api/contacts/id should return a contact with the given ID", async () => {
-//   const id = contact1.id;
-//     await request(app)
-//     .get(`/api/contacts/${id}`)
-//     .expect(res => {
-//       expect(res.status).toBe(200);
-//       expect(res.body).toHaveProperty("contact");
-//       expect(res.body.contact).toHaveProperty("id", id);
-//     });
-// });
-
-// test("PATCH /api/contacts/id/details should return an updated contact", async () => {
-//   const id = 1;
-//   const details = {
-//     surname: "Okorowa",
-//     firstname: "Johnson",
-//     mobile: "08012223333"
-//   };
-//     await request(app)
-//     .patch(`/api/contacts/${id}/details`)
-//     .send(details)
-//     .expect(res => {
-//       expect(res.status).toBe(200);
-//       expect(res.body).toHaveProperty("data");
-//       expect(res.body.data).toHaveProperty("mobile", details.mobile);
-//     });
-// });
-
-// test("PATCH /api/contacts/id/status should return contact with an updated status", async () => {
-//   const id = 1;
-//   const details = {
-//     status: "blocked"
-//   };
-//     await request(app)
-//     .patch(`/api/contacts/${id}/status`)
-//     .send(details)
-//     .expect(res => {
-//       expect(res.status).toBe(200);
-//       expect(res.body).toHaveProperty("data");
-//       expect(res.body.data).toHaveProperty("status", details.status);
-//     });
-// });
-// test("PATCH /api/contacts/id/delete should update contact's deleted status to true", async () => {
-//   const id = 1;
-//   const details = {
-//     deleted: true
-//   };
-//     await request(app)
-//     .patch(`/api/contacts/${id}/delete`)
-//     .send(details)
-//     .expect(res => {
-//       expect(res.status).toBe(200);
-//       expect(res.body).toHaveProperty("data");
-//       expect(res.body.data).toHaveProperty("deleted", details.deleted);
-//     });
-// });
-// test("DELETE /api/contacts/id should DELETE contact completely from database", async () => {
-//   const id = 4;
-//     await request(app)
-//     .delete(`/api/contacts/${id}`)
-//     .expect(res => {
-//       expect(res.status).toBe(200);
-//       expect(res.body).toHaveProperty("message");
-//       expect(res.body.message).toEqual(`contact ${id} deleted from database`);
-//     });
