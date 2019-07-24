@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/boscoseries/contactAPP_typescript.svg?style=svg)](https://circleci.com/gh/boscoseries/contactAPP_typescript)[![Coverage Status](https://coveralls.io/repos/github/boscoseries/contactAPP_typescript/badge.svg?branch=master)](https://coveralls.io/github/boscoseries/contactAPP_typescript?branch=master)
+[![CircleCI](https://circleci.com/gh/boscoseries/contactAPP_typescript.svg?style=svg)](https://circleci.com/gh/boscoseries/contactAPP_typescript)[![Build Status](https://travis-ci.com/boscoseries/contactAPP_typescript.svg?branch=master)](https://travis-ci.com/boscoseries/contactAPP_typescript)[![Coverage Status](https://coveralls.io/repos/github/boscoseries/contactAPP_typescript/badge.svg?branch=master)](https://coveralls.io/github/boscoseries/contactAPP_typescript?branch=master)
 
 To get all contacts
 
