@@ -21,13 +21,13 @@ switch (process.env.NODE_ENV) {
 
 // connect to mongoDB server
 const connection = mongoose
-  .connect(connectionString, { useNewUrlParser: true })
+  .connect(connectionString, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log(`connected to ${process.env.NODE_ENV} database`))
   .catch(err => console.log(err));
 
 export const dropDB = async () => {
   await mongoose.connection.db.dropDatabase();
-  mongoose.connection.close();
+  await mongoose.connection.close();
 };
 
 export default connection;

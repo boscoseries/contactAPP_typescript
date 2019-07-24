@@ -3,7 +3,10 @@ import app from "../src/app";
 import { dropDB } from "../src/models/connection";
 
 describe("API Routes", () => {
-  afterAll(async () => await dropDB());
+  afterAll(async () => {
+    await dropDB();
+    process.exitCode = 0;
+  });
 
   const contact1Data = {
     surname: "John",
@@ -31,7 +34,7 @@ describe("API Routes", () => {
       .send(contact2Data);
   };
 
-  test("POST /api/contacts should create a new contact", async () => {
+  test("POST /api/contacts should create a new contact", async done => {
     return await request(app)
       .post("/api/contacts")
       .send(contact1Data)
@@ -44,31 +47,34 @@ describe("API Routes", () => {
             status: "available"
           })
         );
+        done();
       });
   });
 
-  test("GET /api/contacts should return an array of 'not-blocked or deleted' contact", async () => {
+  test("GET /api/contacts should return an array of 'not-blocked or deleted' contact", async done => {
     return await request(app)
       .get("/api/contacts")
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty("contacts");
+        done();
       });
   });
 
-  test("GET /api/contacts/id should return a contact with the given ID", async () => {
+  test("GET /api/contacts/id should return a contact with the given ID", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
-    await request(app)
+    return await request(app)
       .get(`/api/contacts/${id}`)
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body.data).toHaveProperty("_id", id);
         expect(res.body.data).toHaveProperty("email", "smartins@gmail.com");
+        done();
       });
   });
 
-  test("PATCH /api/contacts/id/details should return an updated contact", async () => {
+  test("PATCH /api/contacts/id/details should return an updated contact", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
@@ -76,57 +82,61 @@ describe("API Routes", () => {
       firstname: "Johnson",
       mobile: 2348012223333
     };
-    await request(app)
+    return await request(app)
       .patch(`/api/contacts/${id}/details`)
       .send(details)
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty("data");
         expect(res.body.data).toHaveProperty("mobile", details.mobile);
+        done();
       });
   });
 
-  test("PATCH /api/contacts/id/status should return contact with an updated status", async () => {
+  test("PATCH /api/contacts/id/status should return contact with an updated status", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
       status: "blocked"
     };
-    await request(app)
+    return await request(app)
       .patch(`/api/contacts/${id}/status`)
       .send(details)
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty("data");
         expect(res.body.data).toHaveProperty("status", details.status);
+        done();
       });
   });
 
-  test("PATCH /api/contacts/id/delete should update contact's deleted status to true", async () => {
+  test("PATCH /api/contacts/id/delete should update contact's deleted status to true", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
       deleted: true
     };
-    await request(app)
+    return await request(app)
       .patch(`/api/contacts/${id}/delete`)
       .send(details)
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty("data");
         expect(res.body.data).toHaveProperty("deleted", details.deleted);
+        done();
       });
   });
 
-  test("DELETE /api/contacts/id should DELETE contact completely from database", async () => {
+  test("DELETE /api/contacts/id should DELETE contact completely from database", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
-    await request(app)
+    return await request(app)
       .delete(`/api/contacts/${id}`)
       .expect(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty("message");
         expect(res.body.message).toContain(id);
+        done();
       });
   });
 });
