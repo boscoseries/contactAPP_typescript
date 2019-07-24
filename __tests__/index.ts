@@ -4,7 +4,10 @@ import app from "../src/app";
 import mongoose from "mongoose";
 
 describe("API Routes", () => {
-  afterAll(async () => await mongoose.connection.close());
+  afterAll(async () => {
+    await mongoose.connection.close();
+    process.exitCode = 0;
+  });
   test("GET / returns welcome onboard", async done => {
     return await request(app)
       .get("/")
