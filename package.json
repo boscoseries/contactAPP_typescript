@@ -2,11 +2,12 @@
   "name": "contact-api",
   "version": "0.0.0",
   "private": false,
+  "license": "MIT",
   "scripts": {
     "dev:start": "nodemon ./bin/www",
     "prestart": "tsc",
     "start": "cross-env NODE_ENV=development node ./bin/www",
-    "test": "cross-env NODE_ENV=test jest --coverage --coverageReporters=text-lcov | coveralls"
+    "test": "cross-env NODE_ENV=test jest --detectOpenHandles"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
