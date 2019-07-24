@@ -31,7 +31,7 @@ describe("API Routes", () => {
       .send(contact2Data);
   };
 
-  test("POST /api/contacts should create a new contact", async (done) => {
+  test("POST /api/contacts should create a new contact", async done => {
     return await request(app)
       .post("/api/contacts")
       .send(contact1Data)
@@ -44,11 +44,11 @@ describe("API Routes", () => {
             status: "available"
           })
         );
-        done()
+        done();
       });
   });
 
-  test("GET /api/contacts should return an array of 'not-blocked or deleted' contact", async (done) => {
+  test("GET /api/contacts should return an array of 'not-blocked or deleted' contact", async done => {
     return await request(app)
       .get("/api/contacts")
       .expect(res => {
@@ -58,7 +58,7 @@ describe("API Routes", () => {
       });
   });
 
-  test("GET /api/contacts/id should return a contact with the given ID", async (done) => {
+  test("GET /api/contacts/id should return a contact with the given ID", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     return await request(app)
@@ -71,7 +71,7 @@ describe("API Routes", () => {
       });
   });
 
-  test("PATCH /api/contacts/id/details should return an updated contact", async (done) => {
+  test("PATCH /api/contacts/id/details should return an updated contact", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
@@ -90,7 +90,7 @@ describe("API Routes", () => {
       });
   });
 
-  test("PATCH /api/contacts/id/status should return contact with an updated status", async (done) => {
+  test("PATCH /api/contacts/id/status should return contact with an updated status", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
@@ -107,7 +107,7 @@ describe("API Routes", () => {
       });
   });
 
-  test("PATCH /api/contacts/id/delete should update contact's deleted status to true", async (done) => {
+  test("PATCH /api/contacts/id/delete should update contact's deleted status to true", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     const details = {
@@ -124,7 +124,7 @@ describe("API Routes", () => {
       });
   });
 
-  test("DELETE /api/contacts/id should DELETE contact completely from database", async (done) => {
+  test("DELETE /api/contacts/id should DELETE contact completely from database", async done => {
     const contact = await contact2();
     const id = contact.body.data._id;
     return await request(app)
