@@ -36,4 +36,4 @@ jobs:
       # compile typescript
       - run: yarn tsc
       # run tests!
-      - run: yarn test
+      - run: yarn test --coverage

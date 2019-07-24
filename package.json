@@ -1,7 +1,7 @@
 {
   "name": "contact-api",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev:start": "nodemon ./bin/www",
     "prestart": "tsc",
