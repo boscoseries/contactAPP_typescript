@@ -21,7 +21,7 @@ switch (process.env.NODE_ENV) {
 
 // connect to mongoDB server
 const connection = mongoose
-  .connect(connectionString, { useNewUrlParser: true })
+  .connect(connectionString, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log(`connected to ${process.env.NODE_ENV} database`))
   .catch(err => console.log(err));
 

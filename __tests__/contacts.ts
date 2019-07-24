@@ -59,7 +59,7 @@ describe("API Routes", () => {
   test("GET /api/contacts/id should return a contact with the given ID", async () => {
     const contact = await contact2();
     const id = contact.body.data._id;
-    await request(app)
+    return await request(app)
       .get(`/api/contacts/${id}`)
       .expect(res => {
         expect(res.status).toBe(200);
@@ -76,7 +76,7 @@ describe("API Routes", () => {
       firstname: "Johnson",
       mobile: 2348012223333
     };
-    await request(app)
+    return await request(app)
       .patch(`/api/contacts/${id}/details`)
       .send(details)
       .expect(res => {
@@ -92,7 +92,7 @@ describe("API Routes", () => {
     const details = {
       status: "blocked"
     };
-    await request(app)
+    return await request(app)
       .patch(`/api/contacts/${id}/status`)
       .send(details)
       .expect(res => {
@@ -108,7 +108,7 @@ describe("API Routes", () => {
     const details = {
       deleted: true
     };
-    await request(app)
+    return await request(app)
       .patch(`/api/contacts/${id}/delete`)
       .send(details)
       .expect(res => {
@@ -121,7 +121,7 @@ describe("API Routes", () => {
   test("DELETE /api/contacts/id should DELETE contact completely from database", async () => {
     const contact = await contact2();
     const id = contact.body.data._id;
-    await request(app)
+    return await request(app)
       .delete(`/api/contacts/${id}`)
       .expect(res => {
         expect(res.status).toBe(200);
