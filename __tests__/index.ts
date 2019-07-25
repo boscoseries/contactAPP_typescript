@@ -2,9 +2,7 @@ import request from "supertest";
 import app from "../src/app";
 import mongoose from "mongoose";
 
-
 describe("API Routes", () => {
-
   afterAll(async () => mongoose.connection.close());
   test("GET / returns welcome onboard", async () => {
     return await request(app)
