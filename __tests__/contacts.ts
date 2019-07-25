@@ -5,7 +5,6 @@ import { dropDB } from "../src/models/connection";
 describe("API Routes", () => {
   afterAll(async () => {
     await dropDB();
-    process.exitCode = 0;
   });
 
   const contact1Data = {
