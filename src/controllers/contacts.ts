@@ -13,11 +13,11 @@ export const addContact = async (req: Request, res: Response) => {
   }
   try {
     const values = { ...value, status: "available", deleted: false };
-    const contact = new Contact(values);
-    const data = await contact.save();
+    const contactModel = new Contact(values);
+    const contact = await contactModel.save();
     res.status(201).json({
       statusCode: 201,
-      data: data
+      contact
     });
   } catch (error) {
     res.json({
@@ -44,7 +44,7 @@ export const getAll = async (_req: Request, res: Response) => {
     }
     res.status(404).json({
       statusCode: 404,
-      message: "No contacts found"
+      error: "No contacts found"
     });
     return;
   } catch (error) {
@@ -72,7 +72,7 @@ export const getBlocked = async (_req: Request, res: Response) => {
     }
     res.status(404).json({
       statusCode: 404,
-      message: "No blocked contacts"
+      error: "No blocked contacts"
     });
     return;
   } catch (error) {
@@ -86,22 +86,22 @@ export const getBlocked = async (_req: Request, res: Response) => {
 // Get a single contact
 export const getOne = async (req: Request, res: Response) => {
   try {
-    const data = await Contact.findById({ _id: req.params.id });
-    if (data.status === "available" && !data.deleted) {
+    const contact = await Contact.findById({ _id: req.params.id });
+    if (contact && contact.status === "available" && !contact.deleted) {
       res.status(200).json({
         statusCode: 200,
-        data
+        contact
       });
       return;
     }
     res.status(404).json({
       statusCode: 404,
-      message: "contact not found"
+      error: "Contact not found"
     });
     return;
   } catch (error) {
-    res.status(400).json({
-      statusCode: 400,
+    res.status(500).json({
+      statusCode: 500,
       error: error.message
     });
   }
@@ -116,50 +116,50 @@ export const update = async (req: Request, res: Response) => {
     if (!data) {
       res.status(404).json({
         statusCode: 404,
-        message: "contact not found"
+        error: "Contact not found"
       });
       return;
     }
 
     // update contact details
     if (req.route.path === "/:id/details") {
-      const data = await Contact.findByIdAndUpdate(req.params.id, input, {
+      const contact = await Contact.findByIdAndUpdate(req.params.id, input, {
         new: true
       });
       res.status(200).json({
         statusCode: 200,
-        data
+        contact
       });
       return;
     }
     // update contact status
     if (req.route.path === "/:id/status") {
-      const data = await Contact.findByIdAndUpdate(
+      const contact = await Contact.findByIdAndUpdate(
         req.params.id,
         { status: req.body.status },
         { new: true }
       );
       res.status(200).json({
         statusCode: 200,
-        data
+        contact
       });
     }
 
     // update deleted status
     if (req.route.path === "/:id/delete") {
-      const data = await Contact.findByIdAndUpdate(
+      const contact = await Contact.findByIdAndUpdate(
         req.params.id,
         { deleted: req.body.deleted },
         { new: true }
       );
       res.status(200).json({
         statusCode: 200,
-        data
+        contact
       });
     }
   } catch (err) {
-    res.status(400).json({
-      statusCode: 400,
+    res.status(500).json({
+      statusCode: 500,
       error: err.message
     });
   }
@@ -172,18 +172,18 @@ export const deleteOne = async (req: Request, res: Response) => {
     if (!data) {
       res.status(404).json({
         statusCode: 404,
-        message: "contact not found"
+        error: "Contact not found"
       });
       return;
     }
     const deleted = await Contact.findByIdAndDelete({ _id: req.params.id });
     res.status(200).json({
       statusCode: 200,
-      message: `contact with id ${deleted._id} was successfully deleted`
+      message: `Contact with id ${deleted._id} was successfully deleted`
     });
   } catch (error) {
-    res.status(400).json({
-      statusCode: 400,
+    res.status(500).json({
+      statusCode: 500,
       error: error.message
     });
   }

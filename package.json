@@ -6,8 +6,8 @@
   "scripts": {
     "dev:start": "nodemon ./bin/www",
     "prestart": "tsc",
-    "start": "cross-env NODE_ENV=development node ./bin/www",
-    "test": "cross-env NODE_ENV=test jest --coverage --coverageReporters=text-lcov | coveralls"
+    "start": "NODE_ENV=development node ./bin/www",
+    "test": "NODE_ENV=test jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
