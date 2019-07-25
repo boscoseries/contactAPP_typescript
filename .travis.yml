@@ -3,6 +3,6 @@ node_js:
   - "10.16.0"
 deploy:
   on:
-    branch: setup-travis
+    branch: master
 services:
   - mongodb
